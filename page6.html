@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Under the Stars - My Apology 💫</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+    }
+
+    /* Main Content */
+    .main-content {
+      opacity: 1;
+      transition: opacity 1s ease-in;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .main-content.visible {
+      opacity: 1;
+    }
+
+    /* Falling Stars and Hearts */
+    .falling-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .falling-item {
+      position: absolute;
+      animation: fall linear infinite;
+      pointer-events: none;
+    }
+
+    .star {
+      color: #ffd700;
+      font-size: 1.5rem;
+      text-shadow: 0 0 10px #ffd700;
+    }
+
+    .heart {
+      color: #ff6b9d;
+      font-size: 1.2rem;
+      text-shadow: 0 0 8px #ff6b9d;
+    }
+
+    /* Header Section */
+    .header-section {
+      text-align: center;
+      padding: 60px 20px 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .main-title {
+      font-size: 3.5rem;
+      background: linear-gradient(45deg, #ff6b9d, #ffd700, #c44569);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleGlow 3s ease-in-out infinite, gradientMove 4s ease-in-out infinite;
+      margin-bottom: 20px;
+      text-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.3rem;
+      animation: subtitleFloat 3s ease-in-out infinite;
+    }
+
+    /* Photo Gallery */
+    .photo-gallery {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding: 40px 20px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 10;
+    }
+
+    .photo-container {
+      position: relative;
+      animation: photoFloat 4s ease-in-out infinite;
+    }
+
+    .photo-container:nth-child(2) {
+      animation-delay: 1s;
+    }
+
+    .photo-container:nth-child(3) {
+      animation-delay: 2s;
+    }
+
+    .photo-frame {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 30px rgba(255, 107, 157, 0.3);
+      position: relative;
+      transition: all 0.5s ease;
+    }
+
+    .photo-frame::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ff6b9d, #ffd700, #c44569, #ff6b9d);
+      background-size: 400% 400%;
+      animation: borderGlow 3s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-container:hover .photo-frame {
+      transform: scale(1.1);
+      box-shadow: 0 0 50px rgba(255, 107, 157, 0.6);
+    }
+
+    .photo-container:hover .photo-frame img {
+      transform: scale(1.05);
+    }
+
+    /* Message Section */
+    .message-section {
+      text-align: center;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .apology-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      animation: cardGlow 4s ease-in-out infinite;
+    }
+
+    .apology-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.4rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      animation: textReveal 2s ease-out;
+    }
+
+    .question-text {
+      color: #ffd700;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 40px;
+      animation: questionPulse 2s ease-in-out infinite;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+
+    /* Buttons */
+    .buttons-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .response-btn {
+      padding: 18px 45px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: buttonFloat 3s ease-in-out infinite;
+    }
+
+   .btn-yes {
+  background: linear-gradient(45deg, #00b894, #00cec9);
+  color: white;
+  height: 1000px;
+  width: 1000px; /* Add this line for specific width */
+}
+
+    .btn-no {
+      background: linear-gradient(45deg, #e17055, #fdcb6e);
+      color: white;
+      animation-delay: 1s;
+    }
+
+    .response-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: 0.6s;
+    }
+
+    .response-btn:hover::before {
+      left: 100%;
+    }
+
+    .response-btn:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 50px;
+      border-radius: 30px;
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      transform: scale(0.7) rotateY(90deg);
+      transition: all 0.6s ease;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 107, 157, 0.3);
+    }
+
+    .modal.active .modal-content {
+      transform: scale(1) rotateY(0deg);
+    }
+
+    .modal-title {
+      font-size: 2.5rem;
+      margin-bottom: 25px;
+      animation: modalTitleBounce 0.8s ease-out;
+    }
+
+    .modal-message {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.3rem;
+      margin-bottom: 35px;
+      line-height: 1.5;
+    }
+
+    .modal-btn {
+      padding: 15px 35px;
+      background: linear-gradient(45deg, #ff6b9d, #ffd700);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Animations */
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(calc(100vh + 100px)) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { text-shadow: 0 0 30px rgba(255, 107, 157, 0.5); }
+      50% { text-shadow: 0 0 50px rgba(255, 215, 0, 0.8); }
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes subtitleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes photoFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(2deg); }
+    }
+
+    @keyframes borderGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes cardGlow {
+      0%, 100% { box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); }
+      50% { box-shadow: 0 20px 40px rgba(255, 107, 157, 0.2); }
+    }
+
+    @keyframes textReveal {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes questionPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes buttonFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes modalTitleBounce {
+      0% { transform: scale(0.3); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-title {
+        font-size: 4.5rem;
+      }
+      
+      .photo-gallery {
+        gap: 20px;
+      }
+      
+      .photo-frame {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .buttons-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .response-btn {
+        width: 250px;
+      }
+      
+      .apology-card {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Falling Stars and Hearts -->
+  <div class="falling-container" id="fallingContainer"></div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <!-- Header -->
+    <div class="header-section">
+      <h1 class="main-title">I'm Sorry</h1>
+       <p class="subtitle"> </p>
+    </div>
+ <!-- Photo Gallery -->
+    <div class="photo-gallery">
+      <div class="photo-container">
+        <div class="photo-frame">
+          <img src="pic1.png" alt="Beautiful Memory 1">
+        </div>
+      </div>
+      <div class="photo-container">
+        <div class="photo-frame">
+          <img src="pic2.png" alt="Beautiful Memory 2">
+        </div>
+      </div>
+      <div class="photo-container">
+        <div class="photo-frame">
+          <img src="pic3.png" alt="Beautiful Memory 3">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Message Section -->
+    <div class="message-section">
+      <div class="apology-card">
+        <p class="apology-text">
+         
+        </p>
+        <p class="question-text">Do you accept my apology?</p>
+        <div class="buttons-container">
+          <button class="response-btn btn-yes" id="btnYes">Yes, I forgive you 🫡🙆‍♀️</button>
+       <a href="Sorry.html">  <button class="response-btn btn-no" id="btnNo">No 😋</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal" id="yesModal">
+    <div class="modal-content">
+      <h2 class="modal-title">Thank You! 🌟</h2>
+       <p class="modal-message"> Than You ! mwaah ❤️❤️❤️</p>
+      <button class="modal-btn" id="closeYesModal">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="noModal">
+    <div class="modal-content">
+      <h2 class="modal-title">I Understand 🌙</h2>
+      <p class="modal-message">I respect your feelings and I'll wait under these same stars until you're ready. Take all the time you need - I'll be here.</p>
+      <button class="modal-btn" id="closeNoModal">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // Start animations immediately when page loads
+    window.addEventListener('load', function() {
+      startFallingAnimation();
+    });
+
+    // Falling stars and hearts animation
+    function createFallingItem() {
+      const container = document.getElementById('fallingContainer');
+      const item = document.createElement('div');
+      
+      // Random item type
+      const isHeart = Math.random() < 0.3;
+      const symbols = isHeart ? ['💖', '💝', '💕', '💗'] : ['⭐', '✨', '🌟', '💫'];
+      const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+      
+      item.className = `falling-item ${isHeart ? 'heart' : 'star'}`;
+      item.textContent = symbol;
+      
+      // Random properties
+      const x = Math.random() * window.innerWidth;
+      const duration = Math.random() * 8 + 6;
+      const delay = Math.random() * 2;
+      
+      item.style.left = `${x}px`;
+      item.style.animationDuration = `${duration}s`;
+      item.style.animationDelay = `${delay}s`;
+      
+      container.appendChild(item);
+      
+      // Remove after animation
+      setTimeout(() => {
+        if (container.contains(item)) {
+          container.removeChild(item);
+        }
+      }, (duration + delay) * 1000);
+    }
+
+    function startFallingAnimation() {
+      // Create initial items
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => createFallingItem(), i * 300);
+      }
+      
+      // Continue creating items
+      setInterval(createFallingItem, 800);
+    }
+
+    // Celebration effect
+    function createCelebration() {
+      for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+          createFallingItem();
+        }, i * 100);
+      }
+    }
+
+    // Button event listeners
+    document.getElementById('btnYes').addEventListener('click', function() {
+      document.getElementById('yesModal').classList.add('active');
+      createCelebration();
+    });
+
+    document.getElementById('btnNo').addEventListener('click', function() {
+      document.getElementById('noModal').classList.add('active');
+    });
+
+    document.getElementById('closeYesModal').addEventListener('click', function() {
+      document.getElementById('yesModal').classList.remove('active');
+    });
+
+    document.getElementById('closeNoModal').addEventListener('click', function() {
+      document.getElementById('noModal').classList.remove('active');
+    });
+
+    // Close modals when clicking outside
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
